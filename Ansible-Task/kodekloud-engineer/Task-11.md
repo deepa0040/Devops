@@ -11,7 +11,7 @@ Create an empty file /opt/dba/media.txt on app server 3; its user owner and grou
 
 Note: Validation will try to run the playbook using command ansible-playbook -i inventory playbook.yml so please make sure playbook works this way without passing any extra arguments.
 
-# Solution (Pending)
+# Solution 
 
 ```
 ---
@@ -19,16 +19,26 @@ Note: Validation will try to run the playbook using command ansible-playbook -i 
   become: yes
   hosts: all
   tasks:
-  - name: Create an empty file on all app server
+  - name: Create an empty file on all app server.
     file:
       path: "{{ item.file }}"
       state: touch
       owner: "{{ item.owner }}"
       group: "{{ item.group }}"
     loop:
-    - { file: '/opt/dba/blog.txt', owner: 'tony', group: 'tony', hostname: '172.16.238.10' }
-    - { file: '/opt/dba/story.txt', owner: 'steve', group: 'steve', hostname: '172.16.238.11' }
-    - { file: '/opt/dba/media.txt', owner: 'banner', group: 'banner', hostname: '172.16.238.12' }
-    when:
-      inventory_hostname == item.hostname
+    - { file: '/opt/dba/blog.txt', owner: 'tony', group: 'tony', hostname: 'stapp01' }
+    - { file: '/opt/dba/story.txt', owner: 'steve', group: 'steve', hostname: 'stapp02' }
+    - { file: '/opt/dba/media.txt', owner: 'banner', group: 'banner', hostname: 'stapp03' }
+    when: inventory_hostname == item.hostname
+  - name: Create a symbolic link.
+    file:
+      src: /opt/dba
+      dest: /var/www/html
+      state: link
 ```
+
+Reference:
+
+https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_loops.html
+https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html
