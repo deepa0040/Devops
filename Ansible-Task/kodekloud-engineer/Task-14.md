@@ -46,12 +46,13 @@ Note: Validation will try to run the playbook using command ansible-playbook -i 
         This is a Nautilus sample file, created using Ansible!
       owner: apache
       group: apache
-      mode: 0777
+      mode: 0644
   - name: Add content using lineinfile module.
     lineinfile:
       path: /var/www/html/index.html
       state: present
       line: Welcome to Nautilus Group!
+      insertbefore: BOF
 
 ```
 
